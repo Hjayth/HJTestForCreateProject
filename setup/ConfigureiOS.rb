@@ -23,19 +23,19 @@ module Pod
 
       prefix = nil
 
-      loop do
-        prefix = configurator.ask("What is your class prefix")
+# loop do
+          #prefix = configurator.ask("What is your class prefix")
 
-        if prefix.include?(' ')
-          puts 'Your class prefix cannot contain spaces.'.red
-        else
-          break
-        end
-      end
+# if prefix.include?(' ')
+#  puts 'Your class prefix cannot contain spaces.'.red
+# else
+#   break
+#  end
+#  end
 
       Pod::ProjectManipulator.new({
         :configurator => @configurator,
-        :xcodeproj_path => "../templates/Example/PROJECT.xcodeproj",
+        :xcodeproj_path => "./Example/PROJECT.xcodeproj",
         :platform => :ios,
         :remove_demo_project => (keep_demo == :no),
         :prefix => prefix
