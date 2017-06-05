@@ -92,10 +92,10 @@ RUBY
     
       puts project_folder + "lla"
       puts prefix
-      puts @configurator.user_name,
-      puts @configurator.date,
-      puts @configurator.year,
-      puts @configurator.pod_name,
+      puts @configurator.user_name
+      puts @configurator.date
+      puts @configurator.year
+      puts @configurator.pod_name
       puts @prefix
       
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
@@ -134,7 +134,7 @@ RUBY
     def replace_internal_project_settings
       Dir.glob(project_folder + "/**/**/").each do |name|
         next if Dir.exists? name
-        puts name
+        puts name 
         text = File.read(name)
         
         for find, replace in @string_replacements
