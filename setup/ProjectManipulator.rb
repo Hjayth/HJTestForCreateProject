@@ -91,7 +91,7 @@ RUBY
       # shared schemes have project specific names
     
       puts project_folder + "lla"
-      puts "this is prefix" + @prefix
+      puts  @prefix
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
       File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + "-Example.xcscheme")
 
