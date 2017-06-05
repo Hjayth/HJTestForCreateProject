@@ -89,6 +89,7 @@ RUBY
 
     def rename_files
       # shared schemes have project specific names
+      puts project_folder + "lla"
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
       File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + "-Example.xcscheme")
 
