@@ -91,7 +91,13 @@ RUBY
       # shared schemes have project specific names
     
       puts project_folder + "lla"
-      puts  @prefix
+      puts prefix
+      puts @configurator.user_name,
+      puts @configurator.date,
+      puts @configurator.year,
+      puts @configurator.pod_name,
+      puts @prefix
+      
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
       File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + "-Example.xcscheme")
 
@@ -103,7 +109,7 @@ RUBY
         ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
-          after = project_folder + "/PROJECT/" + file.gsub("CPD", prefix)
+          after = project_folder + "/PROJECT/" + file.gsub("CPD", "HJ")
           File.rename before, after
         end
 
