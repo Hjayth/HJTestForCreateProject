@@ -5,7 +5,5 @@ Dir[File.join($current_dir, "setup/*.rb")].each do |file|
   require_relative(file)
 end
 
-#pod_name = ARGV.shift
-pod_name = $1
-puts pod_name + "ddd"
-#Pod::TemplateConfigurator.new(pod_name).run
+pod_name = ARGV.shift
+Pod::TemplateConfigurator.new(pod_name).run
