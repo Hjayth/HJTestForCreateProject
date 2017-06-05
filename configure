@@ -7,4 +7,5 @@ end
 
 #pod_name = ARGV.shift
 pod_name = $1
-Pod::TemplateConfigurator.new(pod_name).run
+puts pod_name + "ddd"
+#Pod::TemplateConfigurator.new(pod_name).run
