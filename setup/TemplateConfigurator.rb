@@ -17,7 +17,7 @@ module Pod
 
 #----------可以当成主入口
     def run
-      @message_bank.welcome_message
+        #  @message_bank.welcome_message
 
 
 #----------configuration IOS
@@ -34,7 +34,7 @@ module Pod
       reinitialize_git_repo
       run_pod_install
 
-      @message_bank.farewell_message
+# @message_bank.farewell_message
     end
 
     #----------------------------------------#
