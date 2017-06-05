@@ -101,7 +101,7 @@ RUBY
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
 
-          after = project_folder + "/PROJECT/" + file.gsub("HJ", prefix)
+          after = project_folder + "/PROJECT/" + file.gsub("CPD", prefix)
           File.rename before, after
         end
 
