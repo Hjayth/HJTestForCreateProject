@@ -4,21 +4,17 @@
 # echo "please input parameter"
 #exit
 #else
-
-    echo $1
-# Repository_name = "$1"
     echo $Repository_name
-# mkdir $1
-#  cd $1
     #clone 远程基项目
     git clone  git@github.com:Hjayth/HJTestForCreateProject.git $1
         if [ $?  -eq 0 ]
         then
             cd $1
 #运行配置脚本
-            echo " this is the test for $1:" $1
+
+            echo "create and configure your project...."
             ./configure $1
-            echo "configure your project...."
+            echo "compelete create and configure your project"
         else
             echo "your remote repository is not available"
             exit 1

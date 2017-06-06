@@ -73,10 +73,11 @@ module Pod
       # Replace the Podfile with a simpler one with only one target
       podfile_path = project_folder + "/Podfile"
       podfile_text = <<-RUBY
+      # edit podfile   在这里添加基础库
 use_frameworks!
 target '#{test_target.name}' do
   pod '#{@configurator.pod_name}', :path => '../'
-  
+  #  pod ‘basePod’
   ${INCLUDED_PODS}
 end
 RUBY
@@ -100,7 +101,6 @@ RUBY
         ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
-
           after = project_folder + "/PROJECT/" + file.gsub("CPD", prefix)
           File.rename before, after
         end
