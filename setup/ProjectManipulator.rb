@@ -1,4 +1,4 @@
-require 'xcodeproj'
+  require 'xcodeproj'
 
 module Pod
 
@@ -37,7 +37,6 @@ module Pod
     end
 
     def add_podspec_metadata
-        puts @configurator.pod_name
       project_metadata_item = @project.root_object.main_group.children.select { |group| group.name == "Podspec Metadata" }.first
       project_metadata_item.new_file "../" + @configurator.pod_name  + ".podspec"
       project_metadata_item.new_file "../README.md"
@@ -45,6 +44,9 @@ module Pod
     end
 
     def remove_demo_project
+        
+        puts "this is a test for check is remove_demo"
+        puts  "pod_name :" + @configurator.pod_name
       app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
       test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
       test_target.name = @configurator.pod_name + "_Tests"
