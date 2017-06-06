@@ -34,6 +34,8 @@ module Pod
 
       rename_files
       rename_project_folder
+      
+            
     end
 
     def add_podspec_metadata
