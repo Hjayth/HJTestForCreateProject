@@ -36,7 +36,7 @@ module Pod
 
       puts "\n------------------------------"
       puts ""
-      puts "To Configure your project"
+      puts "To get you started we need to ask a few questions, this should only take a minute."
       puts ""
 
       has_run_before = `defaults read org.cocoapods.pod-template HasRunbefore`.chomp == "1"

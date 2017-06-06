@@ -10,19 +10,68 @@ module Pod
       @pod_name = pod_name
       @pods_for_podfile = []
       @prefixes = []
-      #@message_bank = MessageBank.new(self)
+      @message_bank = MessageBank.new(self)
     end
 
+    def ask(question)
+      answer = ""
+      loop do
+        puts "\n#{question}?"
 
+        @message_bank.show_prompt
+        answer = gets.chomp
 
-#----------可以当成主入口
+        break if answer.length > 0
+
+        print "\nYou need to provide an answer."
+      end
+      answer
+    end
+
+    def ask_with_answers(question, possible_answers)
+
+      print "\n#{question}? ["
+
+      print_info = Proc.new {
+
+        possible_answers_string = possible_answers.each_with_index do |answer, i|
+           _answer = (i == 0) ? answer.underlined : answer
+           print " " + _answer
+           print(" /") if i != possible_answers.length-1
+        end
+        print " ]\n"
+      }
+      print_info.call
+
+      answer = ""
+
+      loop do
+        @message_bank.show_prompt
+        answer = gets.downcase.chomp
+
+        answer = "yes" if answer == "y"
+        answer = "no" if answer == "n"
+
+        # default to first answer
+        if answer == ""
+          answer = possible_answers[0].downcase
+          print answer.yellow
+        end
+
+        break if possible_answers.map { |a| a.downcase }.include? answer
+
+        print "\nPossible answers are ["
+        print_info.call
+      end
+
+      answer
+    end
+
     def run
-        #  @message_bank.welcome_message
+      @message_bank.welcome_message
 
 
-#----------configuration IOS
       ConfigureIOS.perform(configurator: self)
-     
 
       replace_variables_in_files
       clean_template_files
@@ -34,7 +83,7 @@ module Pod
       reinitialize_git_repo
       run_pod_install
 
-# @message_bank.farewell_message
+      @message_bank.farewell_message
     end
 
     #----------------------------------------#
@@ -56,13 +105,13 @@ module Pod
     end
 
     def clean_template_files
-      ["./.gitkeep", "configure", "_CONFIGURE.rb", "README.md", "LICENSE", "templates", "setup", "CODE_OF_CONDUCT.md"].each do |asset|
+      ["./**/.gitkeep", "configure", "_CONFIGURE.rb", "README.md", "LICENSE", "templates", "setup", "CODE_OF_CONDUCT.md"].each do |asset|
         `rm -rf #{asset}`
       end
     end
 
     def replace_variables_in_files
-      file_names = ['POD_LICENSE', 'POD_README.md', 'NAME.podspec', podfile_path]
+      file_names = ['POD_LICENSE', 'POD_README.md', 'NAME.podspec', '.travis.yml', podfile_path]
       file_names.each do |file_name|
         text = File.read(file_name)
         text.gsub!("${POD_NAME}", @pod_name)
@@ -103,20 +152,16 @@ module Pod
 
     def set_test_framework(test_type, extension)
       content_path = "setup/test_examples/" + test_type + "." + extension
-      
-      tests_path = "./Example/Tests/Tests." + extension
-       tests = File.read tests_path
-        tests.gsub!("${TEST_EXAMPLE}", File.read(content_path) )
-       File.open(tests_path, "w") { |file| file.puts tests }
+      folder = extension == "m" ? "ios" : "swift"
+      tests_path = "templates/" + folder + "/Example/Tests/Tests." + extension
+      tests = File.read tests_path
+      tests.gsub!("${TEST_EXAMPLE}", File.read(content_path) )
+      File.open(tests_path, "w") { |file| file.puts tests }
     end
 
     def rename_template_files
       FileUtils.mv "POD_README.md", "README.md"
       FileUtils.mv "POD_LICENSE", "LICENSE"
-      
-     
-       puts "this is pod" + "#{pod_name}.podspec"
-      
       FileUtils.mv "NAME.podspec", "#{pod_name}.podspec"
     end
 

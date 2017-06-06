@@ -1,4 +1,4 @@
-  require 'xcodeproj'
+require 'xcodeproj'
 
 module Pod
 
@@ -18,7 +18,6 @@ module Pod
     end
 
     def run
-        @prefix = "HJ"
       @string_replacements = {
         "PROJECT_OWNER" => @configurator.user_name,
         "TODAYS_DATE" => @configurator.date,
@@ -30,7 +29,7 @@ module Pod
 
       @project = Xcodeproj::Project.open(@xcodeproj_path)
       add_podspec_metadata
-      remove_demo_project #if @remove_demo_target
+      remove_demo_project if @remove_demo_target
       @project.save
 
       rename_files
@@ -45,9 +44,6 @@ module Pod
     end
 
     def remove_demo_project
-        
-        puts "this is a test for check is remove_demo"
-        puts  "pod_name :" + @configurator.pod_name
       app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
       test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
       test_target.name = @configurator.pod_name + "_Tests"
@@ -63,16 +59,16 @@ module Pod
       end
 
       # Remove the references in xcode
-       project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
-       project_app_group.remove_from_project
+      project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
+      project_app_group.remove_from_project
 
       # Remove the product reference
-       product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
-       product.remove_from_project
+      product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
+      product.remove_from_project
 
       # Remove the actual folder + files for both projects
-      # `rm -rf templates/ios/Example/PROJECT`
-      # `rm -rf templates/swift/Example/PROJECT`
+      `rm -rf templates/ios/Example/PROJECT`
+      `rm -rf templates/swift/Example/PROJECT`
 
       # Replace the Podfile with a simpler one with only one target
       podfile_path = project_folder + "/Podfile"
@@ -80,7 +76,7 @@ module Pod
 use_frameworks!
 target '#{test_target.name}' do
   pod '#{@configurator.pod_name}', :path => '../'
-  pod 'AFNetworking'
+  
   ${INCLUDED_PODS}
 end
 RUBY
@@ -93,18 +89,7 @@ RUBY
 
     def rename_files
       # shared schemes have project specific names
-    
-      puts project_folder + "lla"
-      puts @configurator.user_name
-      puts @configurator.date
-      puts @configurator.year
-      puts @configurator.pod_name
-    
-      
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
-      
-      puts "this is the scheme_path:" + scheme_path
-      
       File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + "-Example.xcscheme")
 
       # rename xcproject
@@ -115,7 +100,8 @@ RUBY
         ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
-          after = project_folder + "/PROJECT/" + file.gsub("CPD", "HJ")
+
+          after = project_folder + "/PROJECT/" + file.gsub("CPD", prefix)
           File.rename before, after
         end
 
@@ -138,13 +124,10 @@ RUBY
     end
 
     def replace_internal_project_settings
-        
-        puts "replace project setting"
       Dir.glob(project_folder + "/**/**/**/**").each do |name|
         next if Dir.exists? name
-        puts name 
         text = File.read(name)
-        
+
         for find, replace in @string_replacements
             text = text.gsub(find, replace)
         end

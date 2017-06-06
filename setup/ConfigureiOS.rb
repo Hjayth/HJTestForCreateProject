@@ -13,29 +13,28 @@ module Pod
 
     def perform
 
-      configurator.set_test_framework("xctest", "m")
-      keep_demo = :yes
+      keep_demo = "YES"
+      framework = None
+          configurator.set_test_framework("xctest", "m")
+      
 
-      configurator.add_pod_to_podfile "FBSnapshotTestCase"
-      configurator.add_line_to_pch "@import FBSnapshotTestCase;"
-
-
+      snapshots = configurator.ask_with_answers("Would you like to do view based testing", ["Yes", "No"]).to_sym
 
       prefix = nil
 
-# loop do
-          #prefix = configurator.ask("What is your class prefix")
+      loop do
+        prefix = configurator.ask("What is your class prefix")
 
-# if prefix.include?(' ')
-#  puts 'Your class prefix cannot contain spaces.'.red
-# else
-#   break
-#  end
-#  end
+        if prefix.include?(' ')
+          puts 'Your class prefix cannot contain spaces.'.red
+        else
+          break
+        end
+      end
 
       Pod::ProjectManipulator.new({
         :configurator => @configurator,
-        :xcodeproj_path => "./Example/PROJECT.xcodeproj",
+        :xcodeproj_path => "Example/PROJECT.xcodeproj",
         :platform => :ios,
         :remove_demo_project => (keep_demo == :no),
         :prefix => prefix
@@ -43,9 +42,8 @@ module Pod
       
       # There has to be a single file in the Classes dir
       # or a framework won't be created, which is now default
-      `touch ./Pod/Classes/ReplaceMe.m`
+      `touch Pod/Classes/ReplaceMe.m`
 
-#`mv ./templates/ios/* ./`
     end
   end
 
