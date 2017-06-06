@@ -14,12 +14,8 @@ module Pod
     def perform
 
       keep_demo = "YES"
-      framework = None
-          configurator.set_test_framework("xctest", "m")
-      
-
-      snapshots = configurator.ask_with_answers("Would you like to do view based testing", ["Yes", "No"]).to_sym
-
+      framework = "None"
+      configurator.set_test_framework("xctest", "m")
       prefix = nil
 
       loop do
