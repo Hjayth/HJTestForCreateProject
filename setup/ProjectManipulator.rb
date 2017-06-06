@@ -18,12 +18,13 @@ module Pod
     end
 
     def run
+        @prefix = "HJ"
       @string_replacements = {
         "PROJECT_OWNER" => @configurator.user_name,
         "TODAYS_DATE" => @configurator.date,
         "TODAYS_YEAR" => @configurator.year,
         "PROJECT" => @configurator.pod_name,
-        "HJ" => @prefix
+        "CPD" => @prefix
       }
       replace_internal_project_settings
 
@@ -62,12 +63,12 @@ module Pod
       end
 
       # Remove the references in xcode
-      # project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
-      # project_app_group.remove_from_project
+       project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
+       project_app_group.remove_from_project
 
       # Remove the product reference
-      # product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
-      # product.remove_from_project
+       product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
+       product.remove_from_project
 
       # Remove the actual folder + files for both projects
       # `rm -rf templates/ios/Example/PROJECT`
@@ -139,14 +140,12 @@ RUBY
     def replace_internal_project_settings
         
         puts "replace project setting"
-      Dir.glob(project_folder + "/**/**/**/**/").each do |name|
+      Dir.glob(project_folder + "/**/**/**/**").each do |name|
         next if Dir.exists? name
         puts name 
         text = File.read(name)
         
         for find, replace in @string_replacements
-            puts find
-            puts replace
             text = text.gsub(find, replace)
         end
 
