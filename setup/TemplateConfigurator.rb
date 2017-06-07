@@ -105,8 +105,7 @@ module Pod
                     config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
                 end
             end
-        end
-                         })
+        end})
                          
       end
 
@@ -219,4 +218,4 @@ module Pod
 
     #----------------------------------------#
   end
-  #end
+end
