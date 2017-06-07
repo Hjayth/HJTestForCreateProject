@@ -98,15 +98,16 @@ module Pod
 
       Dir.chdir("Example") do
           #  system "pod install"
-        
-        post_install do |installer|
-            installer.pods_project.targets.each do |target|
+          Pod::Installer.new({
+            post_install do |installer|
+             installer.pods_project.targets.each do |target|
                 target.build_configurations.each do |config|
                     config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
                 end
             end
         end
-
+                         })
+                         
       end
 
       `git add Example/#{pod_name}.xcodeproj/project.pbxproj`
