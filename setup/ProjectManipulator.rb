@@ -49,7 +49,8 @@ module Pod
       app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
       test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
       test_target.name = @configurator.pod_name + "_Tests"
-
+      app_project.name = @configurator.pod_name
+      
       # Remove the implicit dependency on the app
       test_dependency = test_target.dependencies.first
       test_dependency.remove_from_project
@@ -69,8 +70,8 @@ module Pod
       product.remove_from_project
 
       # Remove the actual folder + files for both projects
-      `rm -rf templates/ios/Example/PROJECT`
-      `rm -rf templates/swift/Example/PROJECT`
+      # `rm -rf templates/ios/Example/PROJECT`
+      # `rm -rf templates/swift/Example/PROJECT`
 
       # Replace the Podfile with a simpler one with only one target
       podfile_path = project_folder + "/Podfile"
@@ -86,7 +87,8 @@ end
 post_install do |installer|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
-            if config.name == 'Debug'
+            puts config.name
+            if config.name == '*.debug'
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=1']
                 config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
             end
