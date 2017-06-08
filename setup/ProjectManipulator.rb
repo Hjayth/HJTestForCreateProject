@@ -79,7 +79,8 @@ module Pod
       podfile_text = <<-RUBY
       # edit podfile   在这里添加基础库
 use_frameworks!
-target '#{test_target.name}' do
+platform:ios, '8.0'
+target '#{@configurator.pod_name}' do
   pod '#{@configurator.pod_name}', :path => '../'
   #  pod ‘basePod’
   ${INCLUDED_PODS}
