@@ -47,34 +47,6 @@ module Pod
 
 #configure podFile
     def configure_podFile
-        # app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
-        #test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
-        #test_target.name = @configurator.pod_name + "_Tests"
-     
-      
-      # Remove the implicit dependency on the app
-      # test_dependency = test_target.dependencies.first
-      #  test_dependency.remove_from_project
-      # app_project.remove_from_project
-
-      # Remove the build target on the unit tests
-      #test_target.build_configuration_list.build_configurations.each do |build_config|
-      #  build_config.build_settings.delete "BUNDLE_LOADER"
-      # end
-
-      # Remove the references in xcode
-      # project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
-      # project_app_group.remove_from_project
-
-      # Remove the product reference
-      # product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
-      # product.remove_from_project
-
-      # Remove the actual folder + files for both projects
-      # `rm -rf templates/ios/Example/PROJECT`
-      # `rm -rf templates/swift/Example/PROJECT`
-
-      # Replace the Podfile with a simpler one with only one target
       podfile_path = project_folder + "/Podfile"
       puts "this is the pod filePath " + podfile_path
       podfile_text = <<-RUBY
@@ -92,7 +64,7 @@ post_install do |installer|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
             if config.name == 'Debug'
-                config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=1']
+                config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=2']
                 config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
             end
         end
