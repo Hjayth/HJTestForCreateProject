@@ -55,7 +55,7 @@ use_frameworks!
 platform:ios, '8.0'
 target '#{@configurator.pod_name}' do
   pod '#{@configurator.pod_name}', :path => '../'
-  pod 'AFNetworking'
+  # pod 'AFNetworking'
   #  pod ‘basePod’
   ${INCLUDED_PODS}
 end
