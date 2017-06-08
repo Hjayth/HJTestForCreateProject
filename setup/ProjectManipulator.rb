@@ -29,7 +29,7 @@ module Pod
 
       @project = Xcodeproj::Project.open(@xcodeproj_path)
       add_podspec_metadata
-      remove_demo_project #if @remove_demo_target
+      configure_podFile
       @project.save
 
       rename_files
@@ -45,7 +45,8 @@ module Pod
       project_metadata_item.new_file "../LICENSE"
     end
 
-    def remove_demo_project
+#configure podFile
+    def configure_podFile
         # app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
         #test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
         #test_target.name = @configurator.pod_name + "_Tests"
