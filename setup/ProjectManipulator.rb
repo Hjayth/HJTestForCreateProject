@@ -67,6 +67,7 @@ post_install do |installer|
                 puts config.build_settings['ONLY_ACTIVE_ARCH']
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=2']
                 config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+                puts config.build_settings['ONLY_ACTIVE_ARCH']
             end
         end
     end
