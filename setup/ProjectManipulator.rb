@@ -82,6 +82,18 @@ target '#{test_target.name}' do
   #  pod ‘basePod’
   ${INCLUDED_PODS}
 end
+#configure pod组件的配置
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            if config.name == 'Debug'
+                config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=1']
+                config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+            end
+        end
+    end
+end
+
 RUBY
       File.open(podfile_path, "w") { |file| file.puts podfile_text }
     end
