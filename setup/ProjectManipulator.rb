@@ -65,7 +65,7 @@ post_install do |installer|
         target.build_configurations.each do |config|
             if config.name == 'Debug'
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=2']
-                config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+                config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
             end
         end
     end
