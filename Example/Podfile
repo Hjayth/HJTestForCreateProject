@@ -1,6 +1,6 @@
 use_frameworks!
-
-target '${POD_NAME}_Example' do
+platform:ios, '8.0'
+target '${POD_NAME}' do
   pod '${POD_NAME}', :path => '../'
 
   target '${POD_NAME}_Tests' do
