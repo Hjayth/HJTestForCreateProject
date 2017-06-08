@@ -49,6 +49,7 @@ module Pod
       app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
       test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
       test_target.name = @configurator.pod_name + "_Tests"
+      puts app_project.name + "app_project.name"
       app_project.name = @configurator.pod_name
       
       # Remove the implicit dependency on the app
@@ -66,7 +67,7 @@ module Pod
       project_app_group.remove_from_project
 
       # Remove the product reference
-      product = @project.products.select { |product| product.path == @configurator.pod_name + ".app" }.first
+      product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
       product.remove_from_project
 
       # Remove the actual folder + files for both projects
