@@ -91,8 +91,7 @@ end
 post_install do |installer|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
-            puts config.name
-            if config.name == '*.debug'
+            if config.name == 'Debug'
                 config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=1']
                 config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
             end
