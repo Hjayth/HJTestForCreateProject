@@ -75,6 +75,7 @@ module Pod
 
       # Replace the Podfile with a simpler one with only one target
       podfile_path = project_folder + "/Podfile"
+      puts "this is the pod filePath " + podfile_path
       podfile_text = <<-RUBY
       # edit podfile   在这里添加基础库
 use_frameworks!
