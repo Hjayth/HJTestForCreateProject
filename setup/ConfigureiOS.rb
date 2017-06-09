@@ -32,7 +32,7 @@ module Pod
         :configurator => @configurator,
         :xcodeproj_path => "Example/PROJECT.xcodeproj",
         :platform => :ios,
-        :remove_demo_project => (keep_demo == :no),
+        :remove_demo_project => keep_demo,
         :prefix => prefix
       }).run
       
