@@ -47,7 +47,7 @@ def remove_demo_project
     # Remove the implicit dependency on the app
     test_dependency = test_target.dependencies.first
     test_dependency.remove_from_project
-    app_project.remove_from_project
+    #app_project.remove_from_project
     
     # Remove the build target on the unit tests
     test_target.build_configuration_list.build_configurations.each do |build_config|
