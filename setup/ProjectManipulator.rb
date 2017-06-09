@@ -32,7 +32,6 @@ module Pod
       remove_demo_project
       configure_podFile
       @project.save
-
       rename_files
       rename_project_folder
       
@@ -117,7 +116,7 @@ RUBY
       # rename xcproject
       File.rename(project_folder + "/PROJECT.xcodeproj", project_folder + "/" +  @configurator.pod_name + ".xcodeproj")
 
-      unless @remove_demo_target
+# unless @remove_demo_target
         # change app file prefixes
         ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
