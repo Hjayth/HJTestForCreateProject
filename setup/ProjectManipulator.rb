@@ -49,29 +49,29 @@ module Pod
     def configure_podFile
       podfile_path = project_folder + "/Podfile"
       puts "this is the pod filePath " + podfile_path
-      podfile_text = <<-RUBY
-      # edit podfile   在这里添加基础库
+   # edit podfile   在这里添加基础库
+   podfile_text = <<-RUBY
 use_frameworks!
 platform:ios, '8.0'
 target '#{@configurator.pod_name}' do
   pod '#{@configurator.pod_name}', :path => '../'
   # pod 'AFNetworking'
   #  pod ‘basePod’
-  ${INCLUDED_PODS}
+  # ${INCLUDED_PODS}
 end
 #configure pod组件的配置
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-            puts target.name
-            if config.name == 'Debug'
-                puts config.build_settings['ONLY_ACTIVE_ARCH']
+#post_install do |installer|
+#  installer.pods_project.targets.each do |target|
+#      target.build_configurations.each do |config|
+#          puts target.name
+#          if config.name == 'Debug'
+#              puts config.build_settings['ONLY_ACTIVE_ARCH']
                 #config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=2']
-                config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
-                puts config.build_settings['ONLY_ACTIVE_ARCH']
-            end
-        end
-    end
+                #               config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+                #              puts config.build_settings['ONLY_ACTIVE_ARCH']
+                #            end
+                #      end
+                #   end
 end
 
 RUBY
