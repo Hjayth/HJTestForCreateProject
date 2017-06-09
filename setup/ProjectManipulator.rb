@@ -51,14 +51,14 @@ module Pod
       puts "this is the pod filePath " + podfile_path
    # edit podfile   在这里添加基础库
    podfile_text = <<-RUBY
+platform :ios, '8.0'
 use_frameworks!
-platform:ios, '8.0'
 target '#{@configurator.pod_name}' do
   pod '#{@configurator.pod_name}', :path => '../'
   # pod 'AFNetworking'
   #  pod ‘basePod’
   # ${INCLUDED_PODS}
-end
+  #end
 #configure pod组件的配置
 #post_install do |installer|
 #  installer.pods_project.targets.each do |target|
