@@ -60,7 +60,7 @@ def remove_demo_project
     
     # Remove the product reference
     product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
-    product.remove_from_project
+    #product.remove_from_project
     
 end
 
