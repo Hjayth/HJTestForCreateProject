@@ -13,9 +13,15 @@ module Pod
 
     def perform
 
+
+    framework = :None
+     
+    configurator.set_test_framework("xctest", "m")
+  
       keep_demo = :yes
-      framework = "None"
-      configurator.set_test_framework("xctest", "m")
+      snapshots = :no
+
+
       prefix = "SA"
 
 #      loop do
@@ -30,7 +36,7 @@ module Pod
 
       Pod::ProjectManipulator.new({
         :configurator => @configurator,
-        :xcodeproj_path => "Example/PROJECT.xcodeproj",
+        :xcodeproj_path => "templates/ios/Example/PROJECT.xcodeproj",
         :platform => :ios,
         :remove_demo_project => (keep_demo == :no),
         :prefix => prefix
@@ -40,6 +46,7 @@ module Pod
       # or a framework won't be created, which is now default
       `touch Pod/Classes/ReplaceMe.m`
 
+      `mv ./templates/ios/* ./`
     end
   end
 

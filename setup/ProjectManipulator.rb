@@ -29,40 +29,12 @@ module Pod
 
       @project = Xcodeproj::Project.open(@xcodeproj_path)
       add_podspec_metadata
-      remove_demo_project
-      configure_podFile
+      remove_demo_project if @remove_demo_target
       @project.save
+
       rename_files
       rename_project_folder
-      
-            
     end
-
-def remove_demo_project
-    app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
-    test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
-    test_target.name = @configurator.pod_name + "_Tests"
-    
-    # Remove the implicit dependency on the app
-    #test_dependency = test_target.dependencies.first
-    #test_dependency.remove_from_project
-    #app_project.remove_from_project
-    
-    # Remove the build target on the unit tests
-    #test_target.build_configuration_list.build_configurations.each do |build_config|
-    #   build_config.build_settings.delete "BUNDLE_LOADER"
-    #  end
-    
-    # Remove the references in xcode
-    project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
-    #   project_app_group.remove_from_project
-    
-    # Remove the product reference
-    product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
-    #product.remove_from_project
-    
-end
-
 
     def add_podspec_metadata
       project_metadata_item = @project.root_object.main_group.children.select { |group| group.name == "Podspec Metadata" }.first
@@ -71,35 +43,42 @@ end
       project_metadata_item.new_file "../LICENSE"
     end
 
-#configure podFile
-    def configure_podFile
-      podfile_path = project_folder + "/Podfile"
-      puts "this is the pod filePath " + podfile_path
-   # edit podfile   在这里添加基础库
-   podfile_text = <<-RUBY
-platform :ios, '8.0'
-use_frameworks!
-target '#{@configurator.pod_name}' do
-  pod '#{@configurator.pod_name}', :path => '../'
-  # pod 'AFNetworking'
-  #  pod ‘basePod’
-  # ${INCLUDED_PODS}
-  #end
-#configure pod组件的配置
-#post_install do |installer|
-#  installer.pods_project.targets.each do |target|
-#      target.build_configurations.each do |config|
-#          puts target.name
-#          if config.name == 'Debug'
-#              puts config.build_settings['ONLY_ACTIVE_ARCH']
-                #config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'DEBUG=2']
-                #               config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
-                #              puts config.build_settings['ONLY_ACTIVE_ARCH']
-                #            end
-                #      end
-                #   end
-end
+    def remove_demo_project
+      app_project = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.application" }
+      test_target = @project.native_targets.find { |target| target.product_type == "com.apple.product-type.bundle.unit-test" }
+      test_target.name = @configurator.pod_name + "_Tests"
 
+      # Remove the implicit dependency on the app
+      test_dependency = test_target.dependencies.first
+      test_dependency.remove_from_project
+      app_project.remove_from_project
+
+      # Remove the build target on the unit tests
+      test_target.build_configuration_list.build_configurations.each do |build_config|
+        build_config.build_settings.delete "BUNDLE_LOADER"
+      end
+
+      # Remove the references in xcode
+      project_app_group = @project.root_object.main_group.children.select { |group| group.display_name.end_with? @configurator.pod_name }.first
+      project_app_group.remove_from_project
+
+      # Remove the product reference
+      product = @project.products.select { |product| product.path == @configurator.pod_name + "_Example.app" }.first
+      product.remove_from_project
+
+      # Remove the actual folder + files for both projects
+      `rm -rf templates/ios/Example/PROJECT`
+      `rm -rf templates/swift/Example/PROJECT`
+
+      # Replace the Podfile with a simpler one with only one target
+      podfile_path = project_folder + "/Podfile"
+      podfile_text = <<-RUBY
+use_frameworks!
+target '#{test_target.name}' do
+  pod '#{@configurator.pod_name}', :path => '../'
+  
+  ${INCLUDED_PODS}
+end
 RUBY
       File.open(podfile_path, "w") { |file| file.puts podfile_text }
     end
@@ -111,16 +90,17 @@ RUBY
     def rename_files
       # shared schemes have project specific names
       scheme_path = project_folder + "/PROJECT.xcodeproj/xcshareddata/xcschemes/"
-      File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + ".xcscheme")
+      File.rename(scheme_path + "PROJECT.xcscheme", scheme_path +  @configurator.pod_name + "-Example.xcscheme")
 
       # rename xcproject
       File.rename(project_folder + "/PROJECT.xcodeproj", project_folder + "/" +  @configurator.pod_name + ".xcodeproj")
 
-#  unless @remove_demo_target
-              # change app file prefixes
+      unless @remove_demo_target
+        # change app file prefixes
         ["CPDAppDelegate.h", "CPDAppDelegate.m", "CPDViewController.h", "CPDViewController.m"].each do |file|
           before = project_folder + "/PROJECT/" + file
           next unless File.exists? before
+
           after = project_folder + "/PROJECT/" + file.gsub("CPD", prefix)
           File.rename before, after
         end
@@ -133,7 +113,7 @@ RUBY
           after = project_folder + "/PROJECT/" + file.gsub("PROJECT", @configurator.pod_name)
           File.rename before, after
         end
-        #  end
+      end
 
     end
 
