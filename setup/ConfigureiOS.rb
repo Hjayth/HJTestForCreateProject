@@ -36,7 +36,7 @@ module Pod
 
       Pod::ProjectManipulator.new({
         :configurator => @configurator,
-        :xcodeproj_path => "templates/ios/Example/PROJECT.xcodeproj",
+        :xcodeproj_path => "Example/PROJECT.xcodeproj",
         :platform => :ios,
         :remove_demo_project => (keep_demo == :no),
         :prefix => prefix
@@ -46,7 +46,7 @@ module Pod
       # or a framework won't be created, which is now default
       `touch Pod/Classes/ReplaceMe.m`
 
-      `mv ./templates/ios/* ./`
+#      `mv ./templates/ios/* ./`
     end
   end
 
