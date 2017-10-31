@@ -13,26 +13,26 @@ module Pod
 
     def perform
 
-      keep_demo = "YES"
+      keep_demo = :yes
       framework = "None"
       configurator.set_test_framework("xctest", "m")
-      prefix = nil
+      prefix = "SA"
 
-      loop do
-        prefix = configurator.ask("What is your class prefix")
-
-        if prefix.include?(' ')
-          puts 'Your class prefix cannot contain spaces.'.red
-        else
-          break
-        end
-      end
+#      loop do
+#        prefix = configurator.ask("What is your class prefix")
+#
+#        if prefix.include?(' ')
+#          puts 'Your class prefix cannot contain spaces.'.red
+#        else
+#          break
+#        end
+#      end
 
       Pod::ProjectManipulator.new({
         :configurator => @configurator,
         :xcodeproj_path => "Example/PROJECT.xcodeproj",
         :platform => :ios,
-        :remove_demo_project => keep_demo,
+        :remove_demo_project => (keep_demo == :no),
         :prefix => prefix
       }).run
       
